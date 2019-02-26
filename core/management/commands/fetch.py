@@ -1,14 +1,13 @@
 from django.core.management.base import BaseCommand
-from django.utils import timezone
+import requests
 
-def show_time():
-	time = timezone.now().strftime('%X')
-    self.stdout.write("It's now %s" % time)
 
 class Command(BaseCommand):
-    help = 'Displays current time'
+	help = 'Displays current time'
 
-    def handle(self, *args, **kwargs):
-    	show_time()
-        time = timezone.now().strftime('%X')
-        self.stdout.write("It's now %s" % time)
+	def handle(self, *args, **kwargs):
+		
+		url = "https://s3.eu-west-2.amazonaws.com/interview-question-data/metoffice/Rainfall-UK.json"
+		response  = requests.get(url)
+		response = response.json()
+		print(response)
