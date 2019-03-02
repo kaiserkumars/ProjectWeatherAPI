@@ -3,12 +3,9 @@ from core.models import WeatherData
 from itertools import product
 import requests
 
-
-
 class Command(BaseCommand):
 	help = 'Fetches data'
 
-	
 	def add_arguments(self,parser):
 		parser.add_argument(
             '--metric', dest='metric', required=False,

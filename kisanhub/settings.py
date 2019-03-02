@@ -71,6 +71,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kisanhub.wsgi.application'
 
+# Pagination to limit number of records shown in each page
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
