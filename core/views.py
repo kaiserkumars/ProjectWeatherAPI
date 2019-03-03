@@ -1,17 +1,30 @@
-from django.shortcuts import render
-from django.http import JsonResponse
 from rest_framework import viewsets
+from rest_framework.response import Response
+from django.db.models import Q
 from . import models
 from . import serializers
-# Create your views here.
-
-def all_wd(request):
-	result=[]
-	for rec in models.WeatherData.objects.all():
-		result.append({'Location':rec.location,'Metric':rec.metric,'Year':rec.year,'Month':rec.month,'Value':rec.value})
-	return JsonResponse(result)
 
 
 class WeatherViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.WeatherSerializer
-    queryset = models.WeatherData.objects.all()
+	serializer_class = serializers.WeatherSerializer
+	# def retrieve(self, request, *args, **kwargs):
+	#     return Response({'something': 'djbftom JSON'})
+	
+	def list(self, request, *args, **kwargs):  # override list
+		output={}
+		queryset=self.get_queryset()
+		for record in queryset.iterator(): 
+			output[str(record.year)+'-'+str(record.month)]=record.value
+		return Response(output)
+
+	def get_queryset(self):
+		location = self.request.query_params.get('location')
+		metric= self.request.query_params.get('metric')
+		start = self.request.query_params.get('start')
+		end = self.request.query_params.get('end')
+		starty = start[:4]
+		startm = start[5:]
+		endy=end[:4]
+		endm=end[5:]
+		queryset = models.WeatherData.objects.filter(location=location,metric=metric,year__gte=starty, year__lte=endy,month__gte=startm,month__lte=endm) 
+		return queryset
