@@ -6,5 +6,5 @@ router = routers.DefaultRouter()
 router.register('weather', views.WeatherViewSet, base_name='core-weather')
 
 urlpatterns =[
-    path('2/',include(router.urls)),
+    path('2/',include(router.urls)),  # url to access the API e.g. /core/2/weather/?<PARAMETERS>
 ]
